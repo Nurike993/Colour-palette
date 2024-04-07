@@ -2,16 +2,23 @@
 <html>
 <head>
     <title>Color Palette Explorer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
     <style>
         .color-box{
             position: relative;
-            width: 80px;
-            height: 50px;
+            width: 131px;
+            height: 110px;
             margin: 10px;
-            border: 1px solid black;
-            border-radius: 3px;
+            margin-left: 8px;
+            /* border: 1px solid black; */
+            border-radius: 4px;
         }
         .color-name {
             margin-left: 10px;
@@ -24,34 +31,82 @@
             margin-left: 10px;
         }
         .color{
-            width: 400px;
+            margin-top: 30px;
+            border: 1px solid black;
+            border-radius: 10px;
+            width: 817px;
+            display: flex;
+            align-items: center;
+        }
+        .open{
+            margin-left: 15px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+        }
+
+        .grid-item {
+            padding: 20px;
+            text-align: center;
+        }
+        .modal-body{
             display: flex;
             align-items: center;
         }
     </style>
     <h2>Color Palette</h2>
     <ul>
-    {% for color in colors %}
+    {% for palett in palettes %}
         <div class="color">
-            <div class="color-box" style="background-color: aqua"></div>
-            <span class="color-name">{{ color.name }} - {{ color.hex_code }}</span>
-            <button class="copy-button" data-hex="{{ color.hex_code }}">Copy Hex</button>
-            <form class="delete-form" method="post" action="{% url 'delete_color' color.id %}">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
+            <div class="color-box" style="background-color: {{ palett.hex_code1 }};"></div>
+            <div class="color-box" style="background-color: {{ palett.hex_code2 }};"></div>
+            <div class="color-box" style="background-color: {{ palett.hex_code3 }};"></div>
+            <div class="color-box" style="background-color: {{ palett.hex_code4 }};"></div>
+            <span class="color-name">{{ palett.name }}</span>
+            <button type="button" class="btn btn-primary open" data-toggle="modal" data-target="#exampleModalCenter{{ palett.id }}">
+                Open Palette
+            </button>
+        </div>
+    
+        <div class="modal fade" id="exampleModalCenter{{ palett.id }}" tabindex="-1" role="dialog" aria-labelledby="Palette" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Palette</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-container">
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palett.hex_code1 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palett.hex_code2 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palett.hex_code3 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palett.hex_code4 }};"></div></div>
+                            
+                            <div class="grid-item"><span class="color-name">{{ palett.color1 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palett.color2 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palett.color3 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palett.color4 }}</span></div>
+                            
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palett.hex_code1 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palett.hex_code2 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palett.hex_code3 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palett.hex_code4 }}">Copy Hex</button></div>
+                            
+                            <!-- <form class="delete-form" method="post" action="{% url 'delete_color' palett.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     {% endfor %}
-    </ul>
 
-    <h2>Add Color</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Add Color</button>
-    </form>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             $('.copy-button').click(function() {
