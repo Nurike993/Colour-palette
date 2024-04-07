@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Palette Explorer</title>
+</head>
+<body>
+    <style>
+        .color-box{
+            position: relative;
+            width: 80px;
+            height: 50px;
+            margin: 10px;
+            border: 1px solid black;
+            border-radius: 3px;
+        }
+        .color-name {
+            margin-left: 10px;
+            margin-top: 0;
+        }
+        .delete-form {
+            margin-left: 10px;
+        }
+        .copy-button {
+            margin-left: 10px;
+        }
+        .color{
+            width: 400px;
+            display: flex;
+            align-items: center;
+        }
+    </style>
+    <h2>Color Palette</h2>
+    <ul>
+    {% for color in colors %}
+        <div class="color">
+            <div class="color-box" style="background-color: aqua"></div>
+            <span class="color-name">{{ color.name }} - {{ color.hex_code }}</span>
+            <button class="copy-button" data-hex="{{ color.hex_code }}">Copy Hex</button>
+            <form class="delete-form" method="post" action="{% url 'delete_color' color.id %}">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </div>
+    {% endfor %}
+    </ul>
+
+    <h2>Add Color</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Color</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.copy-button').click(function() {
+                var hexCode = $(this).data('hex');
+                copyToClipboard(hexCode);
+            });
+
+            function copyToClipboard(text) {
+                var dummyElement = document.createElement("textarea");
+                document.body.appendChild(dummyElement);
+                dummyElement.value = text;
+                dummyElement.select();
+                document.execCommand("copy");
+                document.body.removeChild(dummyElement);
+            }
+        });
+    </script>
+</body>
+</html>
