@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit palette</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <style>
+        .word{
+            text-align: center;
+        }
+        .soz{
+            margin-top: 25px;
+        }
+        .editor{
+            height: 417px;
+            width: 1300px;
+            margin-left: 100px;
+            margin-top: 40px;
+            display: flex;
+            flex-wrap: wrap; /* Ensure items wrap to new line if necessary */
+            justify-content: space-between; /* Distribute items evenly along the main axis */
+        }
+        .color-box {
+            margin-left: 20px;
+            width: 300px;
+        }
+        .box{
+            height: 200px;
+            width: 300px;
+        }
+
+        .grid-container {
+            width: 300px;
+            display: grid;
+            column-gap: 17px;
+            grid-template-columns: auto auto;
+        }
+
+        .grid-item {
+            left: 0;
+            padding: 20px;
+        }
+        
+        .big-grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+        }
+
+        .big-grid-item {
+            text-align: center;
+        }
+    </style>
+    <div class="word">
+        <h2 class="soz">Edit Palette {{ palette.name }}</h2>
+    </div>
+    
+    <div class="editor">
+        <form action="/edit/{{ palette_id }}/" method="post">
+            {% csrf_token %}
+            <div class="big-grid-container">
+                <div class="big-grid-item">
+                    <div class="color-box">
+                        <input type="color" id="color1" class="box" value="{{ palette.hex_code1 }}">
+                        <div class="slider">
+                            <div class="grid-container">
+                                <div class="grid-item"><label for="hue1">Hue:</label></div>
+                                <div class="grid-item"><input type="range" id="hue1" name="hue1" min="0" max="360" value="0"></div>
+                                
+                                <div class="grid-item"><label for="saturation1">Saturation:</label></div>
+                                <div class="grid-item"><input type="range" id="saturation1" name="saturation1" min="0" max="100" value="0"></div>
+
+                                <div class="grid-item"><label for="lightness1">Lightness:</label></div>
+                                <div class="grid-item"><input type="range" id="lightness1" name="lightness1" min="0" max="50" value="0"></div>
+                            </div>
+                        </div>
+                        <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code1 }}">Copy Hex</button></div>
+                    </div>
+                </div>
+                <div class="big-grid-item">
+                    <div class="color-box">
+                        <input type="color" id="color2" class="box" value="{{ palette.hex_code2 }}">
+                        <div class="slider">
+                            <div class="grid-container">
+                                <div class="grid-item"><label for="hue2">Hue:</label></div>
+                                <div class="grid-item"><input type="range" id="hue2" name="hue2" min="0" max="360" value="0"></div>
+                                
+                                <div class="grid-item"><label for="saturation2">Saturation:</label></div>
+                                <div class="grid-item"><input type="range" id="saturation2" name="saturation2" min="0" max="100" value="0"></div>
+
+                                <div class="grid-item"><label for="lightness2">Lightness:</label></div>
+                                <div class="grid-item"><input type="range" id="lightness2" name="lightness2" min="0" max="50" value="0"></div>
+                            </div>
+                        </div>
+                        <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code2 }}">Copy Hex</button></div>
+                    </div>
+                </div>
+                <div class="big-grid-item">
+                    <div class="color-box">
+                        <input type="color" id="color3" class="box" value="{{ palette.hex_code3 }}">
+                        <div class="slider">
+                            <div class="grid-container">
+                                <div class="grid-item"><label for="hue3">Hue:</label></div>
+                                <div class="grid-item"><input type="range" id="hue3" name="hue3" min="0" max="360" value="0"></div>
+                                
+                                <div class="grid-item"><label for="saturation3">Saturation:</label></div>
+                                <div class="grid-item"><input type="range" id="saturation3" name="saturation3" min="0" max="100" value="0"></div>
+
+                                <div class="grid-item"><label for="lightness3">Lightness:</label></div>
+                                <div class="grid-item"><input type="range" id="lightness3" name="lightness3" min="0" max="50" value="0"></div>
+                            </div>
+                        </div>
+                        <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code3 }}">Copy Hex</button></div>
+                    </div>
+                </div>
+                <div class="big-grid-item">
+                    <div class="color-box">
+                        <input type="color" id="color4" class="box" value="{{ palette.hex_code4 }}">
+                        <div class="slider">
+                            <div class="grid-container">
+                                <div class="grid-item"><label for="hue4">Hue:</label></div>
+                                <div class="grid-item"><input type="range" id="hue4" name="hue4" min="0" max="360" value="0"></div>
+                                
+                                <div class="grid-item"><label for="saturation4">Saturation:</label></div>
+                                <div class="grid-item"><input type="range" id="saturation4" name="saturation4" min="0" max="100" value="0"></div>
+
+                                <div class="grid-item"><label for="lightness4">Lightness:</label></div>
+                                <div class="grid-item"><input type="range" id="lightness4" name="lightness4" min="0" max="50" value="0"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code4 }}">Copy Hex</button></div>
+                </div>
+            </div>
+        </form>
+        <form action="{% url 'save_palette' palette_id=palette.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">Save Palette</button>
+        </form>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".copy-button").click(function(event){
+                event.preventDefault();
+                var hexCode = $(this).closest('.big-grid-item').find('input[type=color]').val();
+                copyToClipboard(hexCode);
+            });
+    
+            $("input[type=range]").on('input', function () {
+                var hue = $(this).closest('.slider').find("input[type=range][name^=hue]").val();
+                var saturation = $(this).closest('.slider').find("input[type=range][name^=saturation]").val();
+                var lightness = $(this).closest('.slider').find("input[type=range][name^=lightness]").val();
+                var hexColor = HSLToHex(hue, saturation, lightness);
+                $(this).closest('.slider').siblings("input[type=color]").val(hexColor);
+            });
+        });
+    
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+        }
+    
+        function HSLToHex(h, s, l) {
+            h /= 360;
+            s /= 100;
+            l /= 100;
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+            const toHex = x => {
+                const hex = Math.round(x * 255).toString(16);
+                return hex.length === 1 ? '0' + hex : hex;
+            };
+            return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+        }
+    </script>
+</body>
+</html>

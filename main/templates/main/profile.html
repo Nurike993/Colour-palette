@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ user.username }}</h1>
+        <h2>Your Palettes:</h2>
+        {% for palette in user.palettes.all %}
+        <div class="color">
+            <div class="color-box" style="background-color: {{ palette.hex_code1 }};"></div>
+            <div class="color-box" style="background-color: {{ palette.hex_code2 }};"></div>
+            <div class="color-box" style="background-color: {{ palette.hex_code3 }};"></div>
+            <div class="color-box" style="background-color: {{ palette.hex_code4 }};"></div>
+            <span class="color-name">{{ palette.name }}</span>
+            <button type="button" class="btn btn-primary open" data-toggle="modal" data-target="#exampleModalCenter{{ palette.id }}">
+                Open Palette
+            </button>
+        </div>
+        
+        <div class="modal fade" id="exampleModalCenter{{ palette.id }}" tabindex="-1" role="dialog" aria-labelledby="Palette" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Palette</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="grid-container">
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palette.hex_code1 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palette.hex_code2 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palette.hex_code3 }};"></div></div>
+                            <div class="grid-item"><div class="color-box" style="background-color: {{ palette.hex_code4 }};"></div></div>
+                            
+                            <div class="grid-item"><span class="color-name">{{ palette.color1 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palette.color2 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palette.color3 }}</span></div>
+                            <div class="grid-item"><span class="color-name">{{ palette.color4 }}</span></div>
+                            
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code1 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code2 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code3 }}">Copy Hex</button></div>
+                            <div class="grid-item"><button class="copy-button" data-hex="{{ palette.hex_code4 }}">Copy Hex</button></div>
+                            
+                            <!-- <form class="delete-form" method="post" action="{% url 'delete_color' palette.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="copy-all-button btn btn-primary" data-hex1="{{ palette.hex_code1 }}" data-hex2="{{ palette.hex_code2 }}" data-hex3="{{ palette.hex_code3 }}" data-hex4="{{ palette.hex_code4 }}">Copy All</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

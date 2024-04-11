@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Color Palette Explorer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <!-- Bootstrap JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -11,9 +12,23 @@
 </head>
 <body>
     <style>
+        body{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .btn{
+            background-color: #00b8aa;
+            border-style: none;
+            border-radius: 7px;
+            font-weight: 500;
+        }
+        .btn:hover{
+            background-color: rgb(5, 139, 128);
+        }
         .color-box{
             position: relative;
-            width: 131px;
+            width: 120px;
             height: 110px;
             margin: 10px;
             margin-left: 8px;
@@ -34,7 +49,7 @@
             margin-top: 30px;
             border: 1px solid black;
             border-radius: 10px;
-            width: 817px;
+            width: 890px;
             display: flex;
             align-items: center;
         }
@@ -48,15 +63,40 @@
         }
 
         .grid-item {
-            padding: 20px;
+            padding: 27px;
             text-align: center;
         }
         .modal-body{
             display: flex;
             align-items: center;
         }
+        .edit{
+            margin-left: 15px;
+        }
+        .brand{
+            position: absolute;
+        }
+        .but{
+            margin-left: 15px;
+        }
+        .usernamename{
+            margin-top: 5px;
+        }
     </style>
-    <h2>Color Palette</h2>
+    <h2 class="brand">Color Palette</h2>
+    <div class="container d-flex justify-content-end">
+        <form class="d-flex">
+        {% if user.is_authenticated %}
+        <a href="{% url 'profile' %}" class="usernamename" id="color">
+            {{user.username}}
+        </a>
+            <button class="btn btn-primary but" type="submit"><a href="{% url 'logout' %}">Log out</a></button>
+        {% else %}
+            <button class="btn btn-primary but" type="submit"><a href="{% url 'registration' %}">Sign up</a></button>
+            <button class="btn btn-primary but" type="submit"><a href="{% url 'login' %}">Sign in</a></button>
+        {% endif %}
+        </form>
+    </div>
     <ul>
     {% for palett in palettes %}
         <div class="color">
@@ -68,6 +108,7 @@
             <button type="button" class="btn btn-primary open" data-toggle="modal" data-target="#exampleModalCenter{{ palett.id }}">
                 Open Palette
             </button>
+            <a href="/edit/{{ palett.id }}" class="btn btn-success edit">Edit Palette</a>
         </div>
     
         <div class="modal fade" id="exampleModalCenter{{ palett.id }}" tabindex="-1" role="dialog" aria-labelledby="Palette" aria-hidden="true">
@@ -102,27 +143,35 @@
                             </form> -->
                         </div>
                     </div>
+                    <div class="modal-footer">
+                        <button class="copy-all-button btn btn-primary" data-hex1="{{ palett.hex_code1 }}" data-hex2="{{ palett.hex_code2 }}" data-hex3="{{ palett.hex_code3 }}" data-hex4="{{ palett.hex_code4 }}">Copy All</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
     {% endfor %}
-
+    
     <script>
-        $(document).ready(function() {
-            $('.copy-button').click(function() {
-                var hexCode = $(this).data('hex');
+        $(document).ready(function(){
+            $(".copy-button").click(function(){
+                var hexCode = $(this).data("hex");
                 copyToClipboard(hexCode);
             });
-
-            function copyToClipboard(text) {
-                var dummyElement = document.createElement("textarea");
-                document.body.appendChild(dummyElement);
-                dummyElement.value = text;
-                dummyElement.select();
-                document.execCommand("copy");
-                document.body.removeChild(dummyElement);
-            }
         });
+        $(".copy-all-button").click(function(){
+                var hex1 = $(this).data("hex1");
+                var hex2 = $(this).data("hex2");
+                var hex3 = $(this).data("hex3");
+                var hex4 = $(this).data("hex4");
+
+                var allHexCodes = hex1 + ", " + hex2 + ", " + hex3 + ", " + hex4;
+                copyToClipboard(allHexCodes);
+            });
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text);
+        }
     </script>
+
 </body>
 </html>
